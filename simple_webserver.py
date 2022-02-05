@@ -1,10 +1,15 @@
 import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import subprocess
+import socket
 
-
-host_name = '192.168.178.44'
-#host_name = '127.0.0.1'
+if (socket.gethostname() == 'arch-desktop') {
+    # testing environment
+    host_name = '127.0.0.1'
+} else {
+    # live environment
+    host_name = '192.168.178.44'
+}
 host_port = 8000
 streams = ['https://stream-relay-geo.ntslive.net/stream',
     'https://stream-relay-geo.ntslive.net/stream2',
