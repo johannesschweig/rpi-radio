@@ -3,11 +3,12 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import subprocess
 
 
-#host_name = '192.168.178.44'
-host_name = '127.0.0.1'
+host_name = '192.168.178.44'
+#host_name = '127.0.0.1'
 host_port = 8000
 streams = ['https://stream-relay-geo.ntslive.net/stream',
     'https://stream-relay-geo.ntslive.net/stream2',
+    'https://orf-live.ors-shoutcast.at/fm4-q2a',
     'https://www.youtube.com/watch?v=EpjJu7b4UqI' ]
 
 
@@ -67,9 +68,12 @@ class MyServer(BaseHTTPRequestHandler):
             elif post_data == 'NTS Live 2':
                 print('playing', 'NTS Live 2')
                 stream_id = 1
+            elif post_data == 'FM4':
+                print('playing', 'FM4')
+                stream_id = 2
             elif post_data == 'Saufen':
                 print('playing', 'Saufen')
-                stream_id = 2
+                stream_id = 3
             self.job = subprocess.Popen(['cvlc', '--play-and-exit', streams[stream_id]])
             # save pid to file
             f = open ('job.txt', 'w')
