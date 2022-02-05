@@ -3,19 +3,44 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import subprocess
 import socket
 
-if (socket.gethostname() == 'arch-desktop') {
+if socket.gethostname() == 'arch-desktop':
     # testing environment
     host_name = '127.0.0.1'
-} else {
+else:
     # live environment
     host_name = '192.168.178.44'
-}
-host_port = 8000
-streams = ['https://stream-relay-geo.ntslive.net/stream',
-    'https://stream-relay-geo.ntslive.net/stream2',
-    'https://orf-live.ors-shoutcast.at/fm4-q2a',
-    'https://www.youtube.com/watch?v=EpjJu7b4UqI' ]
 
+host_port = 8000
+streams = [
+    {
+        'name': 'NTS Live 1',
+        'url': 'https://stream-relay-geo.ntslive.net/stream'
+    },
+    {
+        'name': 'NTS Live 2',
+        'url': 'https://stream-relay-geo.ntslive.net/stream2'
+    },
+    {
+        'name': 'DLF',
+        'url': 'https://st01.sslstream.dlf.de/dlf/01/high/aac/stream.aac?aggregator=web'
+    },
+    {
+        'name': 'DLF Kultur',
+        'url': 'https://st02.sslstream.dlf.de/dlf/02/high/aac/stream.aac?aggregator=web'
+    },
+    {
+        'name': 'DLF Nova',
+        'url': 'https://st03.sslstream.dlf.de/dlf/03/high/aac/stream.aac?aggregator=web'
+    },
+    {
+        'name': 'FM4',
+        'url': 'https://orf-live.ors-shoutcast.at/fm4-q2a'
+    },
+    {
+        'name': 'Saufen',
+        'url': 'https://www.youtube.com/watch?v=EpjJu7b4UqI'
+     }
+]
 
 class MyServer(BaseHTTPRequestHandler):
     """ A special implementation of BaseHTTPRequestHander """
@@ -67,19 +92,14 @@ class MyServer(BaseHTTPRequestHandler):
         # (optional) start new stream
         if post_data != 'Ausschalten':
             stream_id = -1
-            if post_data == 'NTS Live 1':
-                print('playing', 'NTS Live 1')
-                stream_id = 0
-            elif post_data == 'NTS Live 2':
-                print('playing', 'NTS Live 2')
-                stream_id = 1
-            elif post_data == 'FM4':
-                print('playing', 'FM4')
-                stream_id = 2
-            elif post_data == 'Saufen':
-                print('playing', 'Saufen')
-                stream_id = 3
-            self.job = subprocess.Popen(['cvlc', '--play-and-exit', streams[stream_id]])
+            
+            for index, stream in enumerate(streams):
+                if stream['name'] == post_data:
+                    print('playing', post_data)
+                    stream_id = index
+                    break
+            
+            self.job = subprocess.Popen(['cvlc', '--play-and-exit', streams[stream_id]['url']])
             # save pid to file
             f = open ('job.txt', 'w')
             f.write(str(self.job.pid))
