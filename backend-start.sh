@@ -1,0 +1,1 @@
+nohup flask run --host=192.168.178.44 &

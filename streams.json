@@ -1,0 +1,59 @@
+{
+    "streams":
+        [
+            {
+                "name": "NTS Live 1",
+                "icon": "nts",
+                "color": "#fff",
+                "blackPath": true
+            },
+            {
+                "name": "NTS Live 2",
+                "icon": "nts",
+                "color": "#fff",
+                "blackPath": true
+            },
+            {
+                "name": "DLF",
+                "icon": "dlf",
+                "color": "#198AFF",
+                "blackPath": false
+            },
+            {
+                "name": "DLF Kultur",
+                "icon": "dlf",
+                "color": "#FF6400",
+                "blackPath": false
+            },
+            {
+                "name": "DLF Nova",
+                "icon": "dlf",
+                "color": "#4ac96f",
+                "blackPath": false
+            },
+            {
+                "name": "FM4",
+                "icon": "fm4",
+                "color": "#FFE500",
+                "blackPath": true
+            },
+            {
+                "name": "Cosmo",
+                "icon": "cosmo",
+                "color": "#00A591",
+                "blackPath": false
+            },
+            {
+                "name": "Fip",
+                "icon": "fip",
+                "color": "#E2007A",
+                "blackPath": false
+            },
+            {
+                "name": "Saufen",
+                "icon": "youtube",
+                "color": "#f00",
+                "blackPath": false
+            }
+        ]
+}
