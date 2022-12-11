@@ -48,12 +48,6 @@
                 "icon": "fip",
                 "color": "#E2007A",
                 "blackPath": false
-            },
-            {
-                "name": "Saufen",
-                "icon": "youtube",
-                "color": "#f00",
-                "blackPath": false
             }
         ]
 }

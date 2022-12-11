@@ -7,7 +7,8 @@ export default createStore({
     volume: 1,
     streams: streams,
     playing: -1,
-    hostname: location.hostname
+    hostname: location.hostname,
+    port: 3000
   },
   mutations: {
     setVolume(state, vol) {
@@ -23,21 +24,20 @@ export default createStore({
   },
   actions: {
     getState({ commit, state }) {
-      axios.post(`http://${state.hostname}:5000/get-state`)
+      axios.get(`http://${state.hostname}:3000/get-state`)
       .then((res) => {
-        console.log(res)
         commit('setState', res.data)
       })
       .catch((error) => {
         console.log('error', error)
       })
     },
-    setVolume({ commit, state }, vol) {
-      axios.post(`http://${state.hostname}:5000/set-volume`, {
-        volume: vol
+    setVolume({ commit, state }, volume) {
+      axios.post(`http://${state.hostname}:3000/set-volume`, {
+        volume
       })
       .then((res) => {
-        commit('setVolume', res.data)
+        commit('setVolume', res.data.volume)
       })
       .catch((error) => {
         console.log('error', error)
@@ -45,11 +45,11 @@ export default createStore({
 
     },
     clickStream({ commit, state }, index) {
-      axios.post(`http://${state.hostname}:5000/click-stream`, {
+      axios.post(`http://${state.hostname}:3000/click-stream`, {
         index: index
       })
       .then((res) => {
-        commit('setPlaying', res.data)
+        commit('setPlaying', res.data.index)
       })
       .catch((error) => {
         console.log('error', error)
