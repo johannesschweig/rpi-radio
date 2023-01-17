@@ -1,4 +1,4 @@
-FROM --platform=linux/arm/v7 node:lts
+FROM node:lts
 
 # install simple http server for serving static content
 RUN npm install -g http-server

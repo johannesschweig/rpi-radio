@@ -1,13 +1,11 @@
 version: "3.9"
 services:
   app:
-    build: app/
-    platform: linux/arm/v7
+    image: ribsstaid/radio-app
     ports:
       - "8080:8080"
   service:
-    build: service/
-    platform: linux/arm/v7
+    image: ribsstaid/radio-service
     privileged: true
     ports:
       - "3000:3000" 
