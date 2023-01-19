@@ -6,7 +6,8 @@ services:
       - "8080:8080"
   service:
     image: radio-service-amd64:0.2
-    network_mode: "host"
     ports:
       - "3000:3000" 
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 

@@ -11,8 +11,6 @@ COPY . .
 
 # install mpd
 RUN apt update
-# remove for prod
-# RUN apt install -y vim systemctl lsof alsa-utils
 
 EXPOSE 3000
 CMD [ "node", "index.js" ]

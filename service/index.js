@@ -21,7 +21,7 @@ let client
 async function connectMdpClient() {
 
     client = await mpdapi.connect({
-        host: 'localhost',
+        host: 'host.docker.internal',
         port: 6600
     })
     client.api.db.update()
