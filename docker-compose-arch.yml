@@ -1,13 +1,15 @@
 version: "3.9"
 services:
   app:
-    image: radio-app-amd64:0.2
+    image: radio-app-amd64:0.3
     ports:
       - "8080:8080"
   service:
-    image: radio-service-amd64:0.2
+    image: radio-service-amd64:0.3
     ports:
       - "3000:3000" 
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    environment:
+      - STATUS=production
 
