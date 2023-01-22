@@ -19,8 +19,9 @@ var volume = 1
 var client
 
 async function connectMdpClient() {
+    console.log('ip', process.env.STATUS === 'production' ? 'host.docker.internal' : 'localhost')
     await mpdapi.connect({
-        host: process.env.STATUS === 'production' ? process.env.PROD_IP : process.env.DEV_IP,
+        host: process.env.STATUS === 'production' ? 'host.docker.internal' : 'localhost',
         port: 6600
     }).then((c) => {
         client = c
@@ -41,7 +42,7 @@ async function connectMdpClient() {
             console.log(`Set playing to ${playing} and volume to ${volume}`)
         })
     }).catch(err =>
-        console.log('Could not connect to mpd')
+        console.log('Could not connect to mpd', err)
     )
 }
 

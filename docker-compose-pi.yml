@@ -1,11 +1,11 @@
 version: "3.9"
 services:
   app:
-    image: ribsstaid/radio-app
+    image: ribsstaid/radio-app:0.3
     ports:
       - "8080:8080"
   service:
-    image: ribsstaid/radio-service
+    image: ribsstaid/radio-service:0.3
     ports:
       - "3000:3000" 
     extra_hosts:
