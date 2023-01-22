@@ -19,6 +19,13 @@
         :playing='index === playing'
         />
     </div>
+    <audio
+      ref="audio"
+      loop
+      src="https://raw.githubusercontent.com/anars/blank-audio/master/10-seconds-of-silence.mp3">
+    </audio>
+      <!-- src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"> -->
+
   </div>
 </template>
 
@@ -40,9 +47,40 @@ export default {
     playing: state => state.playing,
     error: state => state.error,
   }),
+  watch: {
+    playing (newPlaying, _oldPlaying) {
+      if (newPlaying >= 0) {
+        this.$refs.audio.play()
+      } else {
+        this.$refs.audio.pause()
+      }
+    }
+  },
   created() {
     this.$store.dispatch('getState')
+  },
+  mounted() {
+    // setup mediasession
+    if (!('mediaSession' in navigator)) {
+      console.log('mediaSession is not supported');
+      return;
+    }
+    window.addEventListener('click', () => {
+				this.$refs.audio.play();
+		}, {once: true});
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: 'Küchendisco'
+    });
+    navigator.mediaSession.setActionHandler('play', () => {
+      this.$store.dispatch('playMedia')
+      this.$refs.audio.play()
+    });
+    navigator.mediaSession.setActionHandler('pause', () => {
+      this.$store.dispatch('pauseMedia')
+      this.$refs.audio.pause()
+    });
   }
+
 }
 </script>
 

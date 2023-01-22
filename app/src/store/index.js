@@ -7,7 +7,7 @@ function onError(error, commit) {
     commit('setError', {
       'backend': true
     })
-    console.log('Backend error')
+    console.log('Backend error', error)
   } else {
     commit('setError', {
       'mpd': true,
@@ -21,6 +21,7 @@ export default createStore({
   state: {
     volume: 1,
     playing: -1,
+    lastStream: -1,
     error: {
       mpd: false,
       backend: false
@@ -35,6 +36,7 @@ export default createStore({
     },
     setPlaying(state, i) {
       state.playing = i
+      state.lastStream = i
     },
     setState(state, newState) {
       state.playing = parseInt(newState.playing)
@@ -47,13 +49,10 @@ export default createStore({
       if (error.hasOwnProperty('backend')) {
         state.error.backend = error.backend
       }
-    },
+    }
   },
   actions: {
-    getState({
-      commit,
-      state
-    }) {
+    getState({ commit, state }) {
       axios.get(`http://${state.hostname}:3000/get-state`)
         .then((res) => {
           commit('setState', res.data)
@@ -61,10 +60,7 @@ export default createStore({
         })
         .catch((error) => onError(error, commit))
     },
-    setVolume({
-      commit,
-      state
-    }, volume) {
+    setVolume({ commit, state }, volume) {
       axios.post(`http://${state.hostname}:3000/set-volume`, {
           volume
         })
@@ -74,10 +70,7 @@ export default createStore({
         })
         .catch((error) => onError(error, commit))
     },
-    clickStream({
-      commit,
-      state
-    }, index) {
+    clickStream({ commit, state }, index) {
       axios.post(`http://${state.hostname}:3000/click-stream`, {
           index: index
         })
@@ -87,7 +80,16 @@ export default createStore({
         })
         .catch((error) => onError(error, commit))
     },
-
+    playMedia({ state, dispatch }) {
+      if (state.playing === -1) { // if not playing, play last stream
+        dispatch('clickStream', state.lastStream)
+      }
+    },
+    pauseMedia({ state, dispatch }) {
+      if (state.playing >= 0) { // if playing, pause current stream
+        dispatch('clickStream', state.playing)
+      }
+    }
   },
   getters: {
     getHighlightColor: state => {
