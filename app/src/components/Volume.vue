@@ -43,7 +43,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(16, 1fr);
   height: 24px;
-  gap: 8px;
+  gap: 6px;
 }
 
 .control {

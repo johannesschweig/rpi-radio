@@ -2,11 +2,30 @@ import { createStore } from 'vuex'
 import { streams } from '../../streams.json'
 import axios from 'axios'
 
+function onError(error, commit) {
+  if (!error.response) {
+    commit('setError', {
+      'backend': true
+    })
+    console.log('Backend error')
+  } else {
+    commit('setError', {
+      'mpd': true,
+      'backend': false
+    })
+    console.log('MPD error', error)
+  }
+}
+
 export default createStore({
   state: {
     volume: 1,
-    streams: streams,
     playing: -1,
+    error: {
+      mpd: false,
+      backend: false
+    },
+    streams: streams,
     hostname: location.hostname,
     port: 3000
   },
@@ -20,42 +39,55 @@ export default createStore({
     setState(state, newState) {
       state.playing = parseInt(newState.playing)
       state.volume = parseFloat(newState.volume)
-    }
+    },
+    setError(state, error) {
+      if (error.hasOwnProperty('mpd')) {
+        state.error.mpd = error.mpd
+      }
+      if (error.hasOwnProperty('backend')) {
+        state.error.backend = error.backend
+      }
+    },
   },
   actions: {
-    getState({ commit, state }) {
+    getState({
+      commit,
+      state
+    }) {
       axios.get(`http://${state.hostname}:3000/get-state`)
-      .then((res) => {
-        commit('setState', res.data)
-      })
-      .catch((error) => {
-        console.log('error', error)
-      })
+        .then((res) => {
+          commit('setState', res.data)
+          commit('setError', { 'mpd': false, 'backend': false })
+        })
+        .catch((error) => onError(error, commit))
     },
-    setVolume({ commit, state }, volume) {
+    setVolume({
+      commit,
+      state
+    }, volume) {
       axios.post(`http://${state.hostname}:3000/set-volume`, {
-        volume
-      })
-      .then((res) => {
-        commit('setVolume', res.data.volume)
-      })
-      .catch((error) => {
-        console.log('error', error)
-      })
-
+          volume
+        })
+        .then((res) => {
+          commit('setVolume', res.data.volume)
+          commit('setError', { 'mpd': false, 'backend': false })
+        })
+        .catch((error) => onError(error, commit))
     },
-    clickStream({ commit, state }, index) {
+    clickStream({
+      commit,
+      state
+    }, index) {
       axios.post(`http://${state.hostname}:3000/click-stream`, {
-        index: index
-      })
-      .then((res) => {
-        commit('setPlaying', res.data.index)
-      })
-      .catch((error) => {
-        console.log('error', error)
-      })
+          index: index
+        })
+        .then((res) => {
+          commit('setPlaying', res.data.index)
+          commit('setError', { 'mpd': false, 'backend': false })
+        })
+        .catch((error) => onError(error, commit))
     },
-    
+
   },
   getters: {
     getHighlightColor: state => {
