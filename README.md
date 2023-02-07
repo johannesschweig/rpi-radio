@@ -20,8 +20,9 @@ You can add your own mp3 files in mpd/music/.
 - automatically start mpd on startup with `systemctl enable --user mpd`
 
 ## Running in production
-### Start backend
+### Start backend and frontend
+- Enable docker start on startup: `sudo systemctl enable docker`
 - Run `docker compose -f docker-compose-pi.yml up -d` 
-### Start frontend
+### Use radio
 - Go to <ip-of-pi>:8080 with your browser and start a stream
 ![image info](./ui.jpg)
